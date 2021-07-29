@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: userauth-service
+  name: userauth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userauth-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: userauth-service
+    spec:
+      containers:
+        - image: userautserviceregistry.azurecr.io/userauth-service:v1
+          name: userauth-service
+          resources: {}
+          imagePullPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: userauth-service
+  name: userauth-service
+spec:
+  ports:
+    - name: 9004-9020
+      port: 9004
+      protocol: TCP
+      targetPort: 9020
+  selector:
+    app: userauth-service
+  type: LoadBalancer
+status:
+  loadBalancer: {}

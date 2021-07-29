@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mysql-standalone:
+    image: 'mysql:5.7'
+    environment:
+      - MYSQL_ROOT_PASSWORD=adminadmin
+      - MYSQL_PASSWORD=adminadmin
+      - MYSQL_DATABASE=applicationdb
+    ports:
+      - "3307:3306"
+  userauth-service-latest:
+    image: userauth-service
+    ports:
+      - "9003:9002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standalone:3306/applicationdb?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "adminadmin"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    depends_on:
+      - mysql-standalone
